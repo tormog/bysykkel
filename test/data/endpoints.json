@@ -1,0 +1,22 @@
+{
+    "data":{
+      "nb":{
+        "feeds":[
+          {
+            "url":"https://gbfs.urbansharing.com/oslobysykkel.no/system_information.json",
+            "name":"system_information"
+          },
+          {
+            "url":"https://gbfs.urbansharing.com/oslobysykkel.no/station_information.json",
+            "name":"station_information"
+          },
+          {
+            "url":"https://gbfs.urbansharing.com/oslobysykkel.no/station_status.json",
+            "name":"station_status"
+          }
+        ]
+      }
+    },
+    "ttl":10,
+    "last_updated":1553592630
+}
