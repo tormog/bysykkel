@@ -34,8 +34,8 @@ func NewStationDownloader(endpoints Endpoints, stationInfo StationInformation, s
 func NewDefaultStationDownloader() *StationDownloader {
 	return &StationDownloader{
 		getEndpoints:          GetEndpoints,
-		getStationInformation: GetStationInformation,
-		getStationStatus:      GetStationStatus,
+		getStationInformation: GetStationData,
+		getStationStatus:      GetStationData,
 	}
 }
 
@@ -67,31 +67,8 @@ func GetEndpoints(url string) (map[string]string, error) {
 	}
 }
 
-/*
-GetStationStatus and GetStationInformation is basically the same code.
-We separate them to duo the mock setup.
-*/
-
-// GetStation retrieves station status.
-func GetStationStatus(url string) (*stations, error) {
-	stations := &stations{}
-	body, code, err := GetRequest(headers, url)
-	if err != nil {
-		return nil, err
-	}
-	if code == 200 {
-		err := json.Unmarshal(body, &stations)
-		if err != nil {
-			return nil, err
-		}
-	} else {
-		return nil, fmt.Errorf("expected other status code than %d", code)
-	}
-	return stations, nil
-}
-
-// GetStation retrieves station information.
-func GetStationInformation(url string) (*stations, error) {
+// GetStationData retrieve data for both station data and information.
+func GetStationData(url string) (*stations, error) {
 	stations := &stations{}
 	body, code, err := GetRequest(headers, url)
 	if err != nil {
@@ -119,17 +96,16 @@ func (d *StationDownloader) GetStationSummary(endpoints string) (*stations, erro
 	stationStatus := &stations{}
 	stationSummary := &stations{}
 
-	for key, elem := range mapOfEndpoints {
-		if key == "station_information" {
-			stationInformation, err = d.getStationInformation(elem)
-			if err != nil {
-				return nil, err
-			}
-		} else if key == "station_status" {
-			stationStatus, err = d.getStationStatus(elem)
-			if err != nil {
-				return nil, err
-			}
+	if elem, ok := mapOfEndpoints["station_information"]; ok {
+		stationInformation, err = d.getStationInformation(elem)
+		if err != nil {
+			return nil, err
+		}
+	}
+	if elem, ok := mapOfEndpoints["station_status"]; ok {
+		stationStatus, err = d.getStationStatus(elem)
+		if err != nil {
+			return nil, err
 		}
 	}
 

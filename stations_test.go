@@ -89,7 +89,7 @@ func TestGetStationInformation(t *testing.T) {
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(b)
 	}))
-	station, err := GetStationInformation(ts.URL)
+	station, err := GetStationData(ts.URL)
 	if err != nil {
 		t.Error(err)
 	}
@@ -108,7 +108,7 @@ func TestGetStationStatus(t *testing.T) {
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(b)
 	}))
-	station, err := GetStationStatus(ts.URL)
+	station, err := GetStationData(ts.URL)
 	if err != nil {
 		t.Error(err)
 	}
